@@ -1,12 +1,14 @@
-import asyncio
 import datetime
+import os
+
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import create_engine, text, Table, Column, Integer, String, MetaData, update, select
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
-from sqlalchemy.orm import DeclarativeBase
-from HOTEL.Postgres.models import Users
-from HOTEL.Postgres.repos.user_repo import UserRepos
-from HOTEL.Postgres.repos.Chat_repo import HistoryMessages
+from dotenv import load_dotenv
+
+
+load_dotenv()
+url = os.getenv('engine')
 
 async_engine = create_async_engine(
     url='postgresql+asyncpg://ydlawq:retrofm.ru1@localhost:5432/ai_agent',
@@ -52,12 +54,6 @@ class DatabaseConnect:
 
 
 
-
-async def s():
-    async with async_session() as session:
-        history = HistoryMessages(session)
-        r = await history.get_history_by_id(7)
-        print(r)
 
 
 

@@ -1,22 +1,34 @@
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import insert, select
-from HOTEL.Postgres.models import Chat
+import time
 
+from sqlalchemy.ext.asyncio import AsyncSession
+from langchain_core.messages import HumanMessage, AIMessage
+from sqlalchemy import insert, select
+from Postgres.models import Chat
 
 
 class HistoryMessages:
-    def __init__(self, session: AsyncSession):
+    def __init__(self, session: AsyncSession, user_id: int):
         self.session = session
+        self.user_id = user_id
 
+    async def add_message(self, messages:list[dict]):
+        stmt = insert(Chat)
+        values = [
+            {**msg, 'user_id': self.user_id} for msg in messages
+        ]
+        await self.session.execute(stmt, values)
 
-    async def add_message(self, **kwargs):
-        user_id = kwargs.get('id')
-        stmt = insert(Chat).values(**kwargs)
-        await self.session.execute(stmt)
+    async def get_history_by_id(self)-> list:
 
-    async def get_history_by_id(self, id)-> list[dict[str, str]]:
-
-        stmt = select(Chat.role, Chat.content).where(Chat.user_id==id)
+        stmt = select(Chat.role, Chat.content).where(Chat.user_id==self.user_id).order_by(Chat.created_at.desc()).limit(10)
         result = await self.session.execute(stmt)
-        return [{role: content} for role, content in result.fetchall()]
+        return [HumanMessage(content) if role=='user' else AIMessage(content) for role, content in reversed(result.fetchall())]
+
+
+
+
+
+
+
+
 
