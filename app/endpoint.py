@@ -19,7 +19,7 @@ from app.graph_main import graph
 
 from llamaindex.vectors_bd import create_storage_context, create_index_query
 
-from app.some_attributs_for_bot import main_kb, FileStates
+from app.utils.some_attributs_for_bot import main_kb, FileStates
 load_dotenv()
 
 

@@ -4,11 +4,11 @@ from llama_index.core import Document
 from pypdf import PdfReader
 from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
 from Postgres.repos.user_repo import UserRepos
-from llama_index.core import VectorStoreIndex, SimpleDirectoryReader, Settings
-from agents import llm_mistral_small, llm_mistral_medium
+from llama_index.core import VectorStoreIndex
+from app.nodes.agents import llm_mistral_small, llm_mistral_medium
 from Postgres.repos.Chat_repo import HistoryMessages
 from prompts import prompt_test_agent, prompt_for_rewrite, prompt_for_context
-from llama_index.core.vector_stores import MetadataFilters, MetadataFilter, ExactMatchFilter
+from llama_index.core.vector_stores import MetadataFilters, ExactMatchFilter
 from llama_index.core.node_parser import SentenceSplitter
 
 parser = SentenceSplitter(

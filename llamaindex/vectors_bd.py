@@ -54,7 +54,7 @@ async def create_storage_context():
 
 
 
-def create_index_query(context):
+async def create_index_query(context):
     return  VectorStoreIndex.from_vector_store(vector_store=vectorstore,
                                                storage_context=context)
 

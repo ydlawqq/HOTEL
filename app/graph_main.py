@@ -1,6 +1,6 @@
-from langgraph.graph import StateGraph, START, END
-from app.classes import State
-from node_funcs import init_user, pdf_is, ans, just_talk, search_in_documents, rewrite_query
+from langgraph.graph import StateGraph
+from app.utils.classes import State
+from app.nodes.node_funcs import init_user, pdf_is, ans, just_talk, search_in_documents, rewrite_query
 
 
 graph = StateGraph(State)
