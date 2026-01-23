@@ -1,61 +1,25 @@
 from io import BytesIO
 from app.utils.classes import State
-from llama_index.core import Document
-from pypdf import PdfReader
+from app.utils.support_functions import get_chunks, from_bytes, text_editor
 from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
 from Postgres.repos.user_repo import UserRepos
 from llama_index.core import VectorStoreIndex
 from app.nodes.agents import llm_mistral_small, llm_mistral_medium
 from Postgres.repos.Chat_repo import HistoryMessages
 from app.utils.prompts import prompt_test_agent, prompt_for_rewrite, prompt_for_context
-from llama_index.core.vector_stores import MetadataFilters, ExactMatchFilter
 from llama_index.core.node_parser import SentenceSplitter
+
+
+
+
+
+
 
 parser = SentenceSplitter(
     chunk_size=1024,
     chunk_overlap=200
 
 )
-
-
-async def get_chunks(state: State):
-    filters = MetadataFilters(
-        filters=[ExactMatchFilter(
-            key='user_id', value=state['user']['id']
-
-        )]
-    )
-    retriever = state['index'].as_retriever(
-        similarity_top_k=5, vector_store_query_kwargs={
-            'filters': filters
-        }
-    )
-    nodes = await retriever.aretrieve(state['new_query'])
-
-
-
-    chunks = [n.text for n in nodes]
-    return chunks
-
-async def from_bytes(bytes:  BytesIO, state: State)-> list[Document]:
-    reader = PdfReader(bytes)
-    docs = []
-    for page in reader.pages:
-        doc = Document(
-            text=page.extract_text(),
-            metadata={
-                'user_id': state['user']['id'],
-                'user_name': state['user']['username']
-            }
-
-        )
-        docs.append(doc)
-    return docs
-
-
-
-
-
 
 
 ### entry point
@@ -109,7 +73,7 @@ async def just_talk(state: State):
         {'role': 'user', 'content': state['mes'].text},
         {'role': 'agent', 'content': answer }
     ])
-    state['messages'].append(HumanMessage(state['mes'].text))
+    state['messages'].append(HumanMessage(state['mes'].text)) # заменить на автоматическую функцию
     state['messages'].append(AIMessage(answer))
     return {'output': answer}
 
@@ -118,7 +82,7 @@ async def search_in_documents(state: State):
 
     context = await get_chunks(state)
 
-    prompt = await prompt_for_context.ainvoke({'input': state['mes'].text, 'context': context})
+    prompt = await prompt_for_context.ainvoke({'input': state['mes'].text, 'context': context}) ## сделать через классы сообщений
 
     response = await llm_mistral_medium.ainvoke(prompt)
 

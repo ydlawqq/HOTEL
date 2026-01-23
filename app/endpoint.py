@@ -32,12 +32,12 @@ l = {}
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    url_webhook = 'https://lazy-parrots-bake.loca.lt' + '/webhook'
+    url_webhook = '' + '/webhook'
     await bot.set_webhook(url_webhook, allowed_updates=dp.resolve_used_update_types(), drop_pending_updates=True)
     await create_tables()
     app.state.graph = graph.compile()
     app.state.storage = await create_storage_context()
-    app.state.index = create_index_query(app.state.storage)
+    app.state.index = await create_index_query(app.state.storage)
     yield
     await bot.delete_webhook()
     l.clear()
