@@ -1,4 +1,3 @@
-
 from sqlalchemy.orm import Mapped, mapped_column, relationship, DeclarativeBase
 from sqlalchemy import Table, Column, Integer, String, MetaData, ForeignKey, text, Text, Time, TIMESTAMP, Enum, CheckConstraint, BigInteger
 import datetime

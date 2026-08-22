@@ -1,18 +1,17 @@
-from typing import TypedDict, Optional
-from aiogram.types import Message
+from typing import TypedDict
+
 from aiogram import Bot
-from langchain_core.messages.human import BaseMessage, HumanMessage
-from sqlalchemy.ext.asyncio import AsyncSession
+from aiogram.types import Message
+from langchain_core.messages import BaseMessage
 from llama_index.core import StorageContext, VectorStoreIndex
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from Postgres.repos.Chat_repo import HistoryMessages
 
 
-
-
 class State(TypedDict):
-    #inputs
+    # inputs
     tg_id: int
-    input: HumanMessage
     mes: Message
     bot: Bot
     session: AsyncSession
@@ -20,7 +19,7 @@ class State(TypedDict):
     mode: str
     index: VectorStoreIndex
 
-    #states
+    # states
     chat: HistoryMessages
     user: dict
     messages: list[BaseMessage]
@@ -28,10 +27,3 @@ class State(TypedDict):
     write_in_vbd: str
     output: str
     new_query: str
-
-
-
-
-
-
-

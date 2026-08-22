@@ -1,10 +1,9 @@
-from langchain_core.messages.human import HumanMessage
-from langchain_core.messages.system import SystemMessage
-from langchain_mistralai import ChatMistralAI
-from langchain_ollama import ChatOllama
-from langchain_mistralai import ChatMistralAI, MistralAIEmbeddings
-from dotenv import load_dotenv
 import os
+
+from dotenv import load_dotenv
+from langchain_mistralai import ChatMistralAI, MistralAIEmbeddings
+from langchain_ollama import ChatOllama
+
 load_dotenv()
 
 api = os.getenv('mistral')
@@ -18,7 +17,6 @@ llm_mistral_small = ChatMistralAI(
 llm_mistral_medium = ChatMistralAI(
     model_name='mistral-large-latest',
     api_key=api
-
 )
 
 
@@ -30,18 +28,4 @@ embedding = MistralAIEmbeddings(
     api_key=api, model='mistral-embed'
 )
 
-
-
 ### CHAINS
-
-
-
-
-
-#res = simple_chain_v1.invoke({'input': 'Привет', 'history': ''})
-
-
-
-
-
-
